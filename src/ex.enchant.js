@@ -1,7 +1,7 @@
 /**
  * @fileOverview
  * ex.enchant.js
- * @version 0.2 (2016/03/08)
+ * @version 0.3.0 (2016/03/26)
  * @requires enchant.js v0.4.0 or later
  * @author Yoshito Imai
  *
@@ -253,6 +253,7 @@ enchant.ex.ExSprite = enchant.Class.create(enchant.Sprite, {
         e = new Event(collisionName);
         e.collision = {};
         e.collision.target = target;
+        e.collisionTarget = target;
         this.dispatchEvent(e);
     },
     /**
@@ -296,45 +297,24 @@ enchant.ex.ExSprite = enchant.Class.create(enchant.Sprite, {
     }
 });
 /**
- * 親Nodeに対する垂直位置を指定します
- * @param {string} align top : 上端<br>middle : 中央<br>bottom : 下端
- * @example
- * var sprite = new ExSprite(32, 32);
- * sprite.setVerticalAlign('middle');
- * core.rootScene.addChild(sprite);
+ * 指定オブジェクト内でx方向の中央寄せを行う。
+ * @param {Object} [another] 基準となるオブジェクト。（省略時は親Nodeとなる）
  */
-enchant.ex.ExSprite.prototype.setVerticalAlign = function(align) {
-    switch (align) {
-        case "top":
-            this.y = 0;
-            break;
-        case "center":
-        case "middle":
-            this.y = this.parentNode.height / 2 - this.height / 2;
-            break;
-        case "bottom":
-            this.y = this.parentNode.height - this.height;
-            break;
-    }
+enchant.ex.ExSprite.prototype.alignHorizontalCenterIn = function(another) {
+    var parentNode = this.parentNode;
+    if (another) parentNode = another;
+    if (parentNode) {
+        this.x = ~~(parentNode.width / 2) - ~~(this.width / 2);
+    } 
 };
 /**
- * 親Nodeに対する水平位置を指定します
- * @param {string} align left : 左端<br>center : 中央<br>right : 右端
- * @example
- * var sprite = new ExSprite(32, 32);
- * sprite.setHorizontalAlign('center');
- * core.rootScene.addChild(sprite);
+ * 指定オブジェクト内でy方向の中央寄せを行う。
+ * @param {Object} [another] 基準となるオブジェクト。（省略時は親Nodeとなる）
  */
-enchant.ex.ExSprite.prototype.setHorizontalAlign = function(align) {
-    switch (align) {
-        case "left":
-            this.x = 0;
-            break;
-        case "center":
-            this.x = this.parentNode.width / 2 - this.width / 2;
-            break;
-        case "right":
-            this.x = this.parentNode.width - this.width;
-            break;
-    }
+enchant.ex.ExSprite.prototype.alignVerticalCenterIn = function(another) {
+    var parentNode = this.parentNode;
+    if (another) parentNode = another;
+    if (parentNode) {
+        this.y = ~~(parentNode.height / 2) - ~~(this.height / 2);
+    } 
 };
