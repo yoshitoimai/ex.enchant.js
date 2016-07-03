@@ -215,7 +215,7 @@ enchant.ex.ExSprite = enchant.Class.create(enchant.Sprite, {
         var thisRect = this._collisionRect ? this._collisionRect : this;
         var targetRect = target._collisionRect ? target._collisionRect : target;
         if (this._collisionBased == this.COLLISION.INTERSECT_BASED) {
-            result = thisRect.intersect(targetRect);
+            result = thisRect.intersectStrict(targetRect);
         } else {
             result = thisRect.within(targetRect, (thisRect.width + thisRect.height) / 4 + (targetRect.width + targetRect.height) / 4);
         }
