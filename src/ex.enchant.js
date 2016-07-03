@@ -105,6 +105,12 @@ enchant.ex.ExSprite = enchant.Class.create(enchant.Sprite, {
             WITHIN_BASED: "within"
         };
         this._collisionBased = this.COLLISION.INTERSECT_BASED;
+        // forrow Based
+        this.FORROW = {
+            ABSOLUTE_BASED: "absolute",
+            RELATIVE_BASED: "relative"
+        };
+        this._forrowBased = this.FORROW.RELATIVE_BASED;
 
         // Event Added to scene
         this.addEventListener(Event.ADDED_TO_SCENE, function(){
@@ -272,14 +278,20 @@ enchant.ex.ExSprite = enchant.Class.create(enchant.Sprite, {
      *
      */
     follow: function(target) {
-        if (this._followArg) {
-            this.removeEventListener(Event.ENTER_FRAME, this._followArg);
+        this.unfollow();
+        if (this._forrowBased == this.FORROW.RELATIVE_BASED) {
+            this.addEventListener(Event.ENTER_FRAME, function() {
+                this._followArg = arguments.callee;
+                this.x += target._moved.x;
+                this.y += target._moved.y;
+            });
+        } else {
+            this.addEventListener(Event.ENTER_FRAME, function() {
+                this._followArg = arguments.callee;
+                this.x += target._moved.x;
+                this.y += target._moved.y;
+            });
         }
-        this.addEventListener(Event.ENTER_FRAME, function() {
-            this._followArg = arguments.callee;
-            this.x += target._moved.x;
-            this.y += target._moved.y;
-        });
     },
     /**
      * followを解除します。
@@ -287,7 +299,14 @@ enchant.ex.ExSprite = enchant.Class.create(enchant.Sprite, {
     unfollow: function() {
         if (this._followArg) {
             this.removeEventListener(Event.ENTER_FRAME, this._followArg);
+            this._followArg = null;
         }
+    },
+    setForrowRelativeBased: function() {
+        this._forrowBased = this.FORROW.RELATIVE_BASED;
+    },
+    setForrowAbsoluteBased: function() {
+        this._forrowBased = this.FORROW.ABSOLUTE_BASED;
     },
     setCollisionIntersectBased: function() {
         this._collisionBased = this.COLLISION.INTERSECT_BASED;
