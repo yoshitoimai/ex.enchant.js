@@ -132,7 +132,7 @@ enchant.ex.ExSprite = enchant.Class.create(enchant.Sprite, {
             if (this._collisionObjects.length > 0) {
                 for (var i = 0; i < this._collisionObjects.length; i++) {
                     (function(_this, value) {
-                        if (value instanceof Sprite && !value.isCollisionIgnore) {
+                        if (value instanceof Sprite && value._isContainedInCollection && !value.isCollisionIgnore) {
                             _this._judgeCollision(value);
                         } else if (value instanceof Array) {
                             for (var i = 0; i < value.length; i++) {
