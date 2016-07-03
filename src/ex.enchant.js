@@ -182,15 +182,16 @@ enchant.ex.ExSprite = enchant.Class.create(enchant.Sprite, {
     },
     _addCollisionRect: function(offsetX, offsetY) {
         this.addEventListener(Event.ENTER_FRAME, function(){
-            this._collisionRect._followArg = arguments.callee;
+            this._collisionRect._arg = arguments.callee;
             this._collisionRect.x = this.x + offsetX;
             this._collisionRect.y = this.y + offsetY;
         });
     },
     removeCollisionRect: function() {
         if (this._collisionRect) {
-            if (this._collisionRect._followArg) {
-                this.removeEventListener(Event.ENTER_FRAME, this._collisionRect._followArg);
+            if (this._collisionRect._arg) {
+                this.removeEventListener(Event.ENTER_FRAME, this._collisionRect._arg);
+                this._collisionRect._arg = null;
             }
             this._collisionRect.remove();
         }
