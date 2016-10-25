@@ -1,7 +1,7 @@
 /**
  * @fileOverview
  * ex.enchant.js
- * @version 0.3.0 (2016/03/26)
+ * @version 0.4.0 (2016/10/25)
  * @requires enchant.js v0.4.0 or later
  * @author Yoshito Imai
  *
