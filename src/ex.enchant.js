@@ -132,7 +132,7 @@ enchant.ex.ExSprite = enchant.Class.create(enchant.Sprite, {
             if (this._collisionObjects.length > 0) {
                 for (var i = 0; i < this._collisionObjects.length; i++) {
                     (function(_this, value) {
-                        if (value instanceof Sprite && value._isContainedInCollection && !value.isCollisionIgnore) {
+                        if (value instanceof Sprite && value._isContainedInCollection && !value.isCollisionIgnore || value instanceof Map) {
                             _this._judgeCollision(value);
                         } else if (value instanceof Array) {
                             for (var i = 0; i < value.length; i++) {
@@ -214,10 +214,19 @@ enchant.ex.ExSprite = enchant.Class.create(enchant.Sprite, {
         var result = false;
         var thisRect = this._collisionRect ? this._collisionRect : this;
         var targetRect = target._collisionRect ? target._collisionRect : target;
-        if (this._collisionBased == this.COLLISION.INTERSECT_BASED) {
-            result = thisRect.intersectStrict(targetRect);
+        if (target instanceof Map) {
+            result = 
+                targetRect.hitTest(thisRect.x + thisRect.width / 2, thisRect.y + thisRect.height / 2) ||
+                targetRect.hitTest(thisRect.x, thisRect.y) ||
+                targetRect.hitTest(thisRect.x + thisRect.width, thisRect.y) ||
+                targetRect.hitTest(thisRect.x, thisRect.y + thisRect.height) ||
+                targetRect.hitTest(thisRect.x + thisRect.width, thisRect.y + thisRect.height);
         } else {
-            result = thisRect.within(targetRect, (thisRect.width + thisRect.height) / 4 + (targetRect.width + targetRect.height) / 4);
+            if (this._collisionBased == this.COLLISION.INTERSECT_BASED) {
+                result = thisRect.intersectStrict(targetRect);
+            } else {
+                result = thisRect.within(targetRect, (thisRect.width + thisRect.height) / 4 + (targetRect.width + targetRect.height) / 4);
+            }
         }
         if (result) {
             target._isCollision = true;
