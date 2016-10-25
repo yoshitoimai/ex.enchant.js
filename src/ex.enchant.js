@@ -166,6 +166,11 @@ enchant.ex.ExSprite = enchant.Class.create(enchant.Sprite, {
     addCollision: function(value) {
         this._collisionObjects.push(value);
     },
+    removeCollision: function(value) {
+        if ((i = this._collisionObjects.indexOf(value)) !== -1) {
+            this._collisionObjects.splice(i, 1);
+        }
+    },
     _addChildCollisionRect: function(sprite) {
         // remove
         this.addEventListener(Event.REMOVE_TO_SCENE, function(){
@@ -325,7 +330,7 @@ enchant.ex.ExSprite.prototype.alignHorizontalCenterIn = function(another) {
     if (another) parentNode = another;
     if (parentNode) {
         this.x = ~~(parentNode.width / 2) - ~~(this.width / 2);
-    } 
+    }
 };
 /**
  * 指定オブジェクト内でy方向の中央寄せを行う。
@@ -336,5 +341,5 @@ enchant.ex.ExSprite.prototype.alignVerticalCenterIn = function(another) {
     if (another) parentNode = another;
     if (parentNode) {
         this.y = ~~(parentNode.height / 2) - ~~(this.height / 2);
-    } 
+    }
 };
