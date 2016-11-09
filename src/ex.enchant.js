@@ -1,7 +1,7 @@
 /**
  * @fileOverview
  * ex.enchant.js
- * @version 0.4.0 (2016/10/25)
+ * @version 0.4.1 (2016/11/9)
  * @requires enchant.js v0.4.0 or later
  * @author Yoshito Imai
  *
@@ -157,6 +157,14 @@ enchant.ex.ExSprite = enchant.Class.create(enchant.Sprite, {
         set: function(value) {
             this._collisionObjects = new Array();
             this._collisionObjects.push(value);
+        }
+    },
+    /**
+     * 衝突の状態を取得します。
+     */
+    isCollision: {
+        get: function() {
+            return this._isCollision;
         }
     },
     /**
