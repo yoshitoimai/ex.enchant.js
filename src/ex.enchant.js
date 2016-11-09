@@ -92,6 +92,7 @@ enchant.ex.ExSprite = enchant.Class.create(enchant.Sprite, {
         this._followArg;
         // collision
         this._collisionRect;
+        this._isCollisionState = false;
         this._isCollision = false;
         this._collisionObjects = new Array();;
         this._collisionDuplicateObjects = new Array();
@@ -128,6 +129,7 @@ enchant.ex.ExSprite = enchant.Class.create(enchant.Sprite, {
 
         // judge collision Target
         this.addEventListener(Event.ENTER_FRAME, function(){
+            _isCollision = false;
             // collision Sprite
             if (this._collisionObjects.length > 0) {
                 for (var i = 0; i < this._collisionObjects.length; i++) {
@@ -242,7 +244,8 @@ enchant.ex.ExSprite = enchant.Class.create(enchant.Sprite, {
             }
         }
         if (result) {
-            target._isCollision = true;
+            this._isCollision = true;
+            target._isCollisionState = true;
             this._dispatchEventCollision(target);
             if (this._moved.x < 0) this._dispatchEventMakeCollision(target, enchant.Event.COLLISION_TO_LEFT);
             if (this._moved.x > 0) this._dispatchEventMakeCollision(target, enchant.Event.COLLISION_TO_RIGHT);
@@ -256,7 +259,7 @@ enchant.ex.ExSprite = enchant.Class.create(enchant.Sprite, {
             }
             return true;
         }
-        target._isCollision = false;
+        target._isCollisionState = false;
         return false;
     },
     _dispatchEventCollision: function(target) {
@@ -269,7 +272,7 @@ enchant.ex.ExSprite = enchant.Class.create(enchant.Sprite, {
             //ターゲットとの衝突がなくなったときイベント生成
             this.addEventListener(Event.ENTER_FRAME, function() {
                 var _arg = arguments.callee;
-                if (!target._isCollision) {
+                if (!target._isCollisionState) {
                     this._collisionDuplicateObjects.splice(existCount);
                     this._dispatchEventMakeCollision(target, enchant.Event.COLLISION_END);
                     this.removeEventListener(Event.ENTER_FRAME, _arg);
