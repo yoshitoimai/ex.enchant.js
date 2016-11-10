@@ -129,7 +129,7 @@ enchant.ex.ExSprite = enchant.Class.create(enchant.Sprite, {
 
         // judge collision Target
         this.addEventListener(Event.ENTER_FRAME, function(){
-            _isCollision = false;
+            this._isCollision = false;
             // collision Sprite
             if (this._collisionObjects.length > 0) {
                 for (var i = 0; i < this._collisionObjects.length; i++) {
