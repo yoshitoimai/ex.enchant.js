@@ -1,8 +1,8 @@
 /**
  * @fileOverview
  * ex.enchant.js
- * @version 0.4.1 (2016/11/9)
- * @requires enchant.js v0.4.0 or later
+ * @version 0.4.2 (2016/11/12)
+ * @requires enchant.js v0.6.0 or later
  * @author Yoshito Imai
  *
  * @description
@@ -230,12 +230,33 @@ enchant.ex.ExSprite = enchant.Class.create(enchant.Sprite, {
         var thisRect = this._collisionRect ? this._collisionRect : this;
         var targetRect = target._collisionRect ? target._collisionRect : target;
         if (target instanceof Map) {
-            result = 
-                targetRect.hitTest(thisRect.x + thisRect.width / 2, thisRect.y + thisRect.height / 2) ||
-                targetRect.hitTest(thisRect.x, thisRect.y) ||
-                targetRect.hitTest(thisRect.x + thisRect.width, thisRect.y) ||
-                targetRect.hitTest(thisRect.x, thisRect.y + thisRect.height) ||
-                targetRect.hitTest(thisRect.x + thisRect.width, thisRect.y + thisRect.height);
+            result = true;
+            target.collisionTile = null;
+            var _offsetX = targetRect._offsetX;
+            var _offsetY = targetRect._offsetY;
+            var _rect = thisRect.getOrientedBoundingRect();
+            _rect.center = [
+                _rect.leftTop[0] + (_rect.rightTop[0] - _rect.leftTop[0]) / 2,
+                _rect.leftTop[1] + (_rect.leftBottom[1] - _rect.leftTop[1]) / 2
+            ];
+            // Center
+            if (targetRect.hitTest(_rect.center[0] - _offsetX, _rect.center[1] - _offsetY)) {
+                target.collisionTile = targetRect.checkTile(_rect.leftTop[0] - _offsetX, _rect.leftTop[1] - _offsetY);
+            // TopLeft
+            } else if (targetRect.hitTest(_rect.leftTop[0] - _offsetX, _rect.leftTop[1] - _offsetY)) {
+                target.collisionTile = targetRect.checkTile(_rect.leftTop[0] - _offsetX, _rect.leftTop[1] - _offsetY);
+            // TopRight
+            } else if (targetRect.hitTest(_rect.rightTop[0] - _offsetX, _rect.rightTop[1] - _offsetY)) {
+                target.collisionTile = targetRect.checkTile(thisRect._offsetX + thisRect.width - _offsetX, thisRect._offsetY - _offsetY);
+            // LeftBottom
+            } else if (targetRect.hitTest(_rect.leftBottom[0] - _offsetX, _rect.leftBottom[1] - _offsetY)) {
+                target.collisionTile = targetRect.checkTile(thisRect._offsetX - _offsetX, thisRect._offsetY + thisRect.height - _offsetY);
+            // RightBottom
+            } else if (targetRect.hitTest(_rect.rightBottom[0] - _offsetX, _rect.rightBottom[1] - _offsetY)) {
+                target.collisionTile = targetRect.checkTile(thisRect._offsetX + thisRect.width - _offsetX, thisRect._offsetY + thisRect.height - _offsetY);
+            } else {
+                result = false;
+            }
         } else {
             if (this._collisionBased == this.COLLISION.INTERSECT_BASED) {
                 result = thisRect.intersectStrict(targetRect);
